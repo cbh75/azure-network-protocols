@@ -124,3 +124,101 @@ Once you have made sure of that, we can leave the remaining options as their def
 <br />
 
 <h2>Connecting to the Virtual Machines and Viewing Network Traffic</h2>
+
+On the virtual machine page in the Azure portal, click on your Windows machine and copy the **Public** IP address. We will use this address to connect to our virtual machine using Remote Desktop Connection.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/a19434db-fa81-4e6a-8c6b-baa478f7adcf)
+
+<br />
+
+With our public address copied, open Remote Desktop Connection by searching for it in the Windows Start menu.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/86f40912-1a46-4202-818f-0f39ad13da54)
+
+<br />
+
+In the **Computer** box, paste the IP address we just copied, then click **Connect**. In the box that pops up, click on **More choices**, **Use a different account**, then type in the username and password you set up when creating the machine, then click **OK**. If you get a pop-up box saying the identity of the remote computer cannot be verified, click **Yes**. We just created this virtual machine, so we know its identity.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/34e03bff-6576-4b01-9754-691950292989)
+
+<br />
+
+Once you have logged in, give the virtual machine a couple seconds to log in, then you will be asked to choose privacy settings. The default settings are fine, so click **Next**, then **Accept**. Afterwards, you will be greeted by the Windows desktop.<br />
+
+Next, download [Wireshark](www.wireshark.org) onto the virtual machine. Once downloaded, navigate to your **Downloads** folder through Windows Explorer or click the **Downloads** tab in Microsoft Edge, and open the Wireshark installer we just downloaded.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/d1e6c778-ee61-4349-8b79-02e32e05f15c)
+
+<br />
+
+Once opened, navigate through the install wizard. The default settings are fine, so there is no need to worry about choosing the wrong ones. The wizard will install additional software called Npcap; this is totally normal. Once the installer finishes, type "wireshark" into the Windows search bar, then open Wireshark.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/048a0da9-290c-48a3-a2b7-d7831c2a821c)
+
+<br />
+
+Once Wireshark is open, click the blue shark fin icon in the top-left corner. This will start capturing all the network packets being sent and received by the virtual machine.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/a1c5b6f7-0feb-417d-9a7e-07d27ac8dcb8)
+
+<br />
+
+Once clicked, you will immediately notice all the packets being flooded onto the screen. This is normal, as it is tracking every single packet used by the machine.<br />
+
+<br />
+
+To make things actually readable, we are going to apply display filter so only certain protocols will be displayed by Wireshark. The first one we will use is the Internet Control Message Protocol, or ICMP for short. This is the protocol used by the ping command, so that is how we will test out Wireshark. In the top box where it says **Apply a display filter**, type "icmp". You will notice the box turns from red to green, as Wireshark recognizes that as a valid filter. Press enter.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/c8f44b2c-cb16-42c1-a7d9-e41b326092d6)
+
+<br />
+
+The first thing you will notice is that the entire screen within Wireshark got cleared. This is because of all of the packets being sent and received, none of them are using ICMP. To change this, we can use Windows Powershell commands to send packets using ICMP. Open a Powershell window by searching in the Windows Search bar.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/ac0cccfd-c024-44bb-8896-c26b7fd82b8b)
+
+For the first example, we are going to ping our Ubuntu virtual machine. To do this, we will need our Ubuntu machine's **Internal** IP address. We use the Internal address instead of the External address because we configured both of our virtual machines to be on the same network, **vm-vnet**. To find our Ubuntu machine's internal address, navigate back to the virtual machines page in the Azure portal, then click on **linux-vm**. On the linux-vm page, find the **Private IP address** and copy it. This is another name for the internal IP address, along with **Public IP address** being another name for the external address. 
+
+<br />
+
+![image](https://github.com/user-attachments/assets/18baf281-7f3b-4d48-8438-7a760b7491a8)
+
+<br />
+
+Once you have copied the private IP address, navigate back into the Windows virtual machine and in the Powershell window we opened, type in "ping (private ip address)", then hit enter.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/83a70f90-99ec-48b7-942d-413e968306fe)
+
+<br />
+
+As shown in the above image, the packets sent from our ping command show up in Wireshark because said packets are using ICMP. You can see that for each reply we got back from our Linux machine, we got a corresponding packet displayed in Wireshark, along with a request packet for each. You can also use ping for external IP addresses, and by extension any website. Back in the Powershell window, type in "ping www.google.com". As long as Google is not down, (I really hope not!), we will see the replies from www.google.com, along with our request packets.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/509fbd4c-911a-4d75-8d6e-ea9a94531d03)
+
+<br />
+
+And with that, we have observed our first network layer protocol!
+
+<br />
+
+<h2>Viewing More Network Traffic</h2>
