@@ -19,6 +19,8 @@ In this tutorial, we observe various network traffic to and from Azure Virtual M
 - Windows 11 (22H2)
 - Ubuntu Server 24.04
 
+<br />
+
 <h2>Creating the Virtual Machines</h2>
 
 Go to the Azure portal (https://portal.azure.com) and ensure you are signed into your Microsoft Azure account. Once you have done so, nativagate to your resource groups. An easy way to do this is to find the search bar at the top of the page and type in "resource groups".
