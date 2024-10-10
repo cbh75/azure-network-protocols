@@ -221,4 +221,72 @@ And with that, we have observed our first network layer protocol!
 
 <br />
 
-<h2>Configuring a Firewall</h2>
+<h2>Configuring a Firewall (Network Security Groups)</h2>
+
+First, initiate a non-stop ping to the Linux machine through Powershell by typing "ping (Ubuntu VM's internal IP here) -t", then pressing enter. You will notice that instead of stopping at four requests like our last two ping commands, this one will keep going until we cancel it.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/c28dd593-b3d8-4792-b99c-2e7d23d1b051)
+
+<br />
+
+While this is going on, go back to the Azure portal and select the Linux virtual machine. On the sidebar, click on the **Networking** tab, then **Network settings**. Here we will see all of our port rules established in the network security group. Here, we want to click the button that says **Create port rule**, then create an **Inbound port rule**.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/9abba85b-40a3-41af-86cc-59912b017162)
+
+<br />
+
+In the pop-up sidebar, we want the following:<br />
+In the **Destination port ranges** box, clear any port number in there and type an asterisk "*". This indicates all ports will be used.<br />
+For **Protocol**, click the bubble next to **ICMPv4** (ICMP... Sound familiar?)<br />
+For **Action**, click the **Deny** bubble.
+For **Priority**, set this number to be a lower number than the lowest number in the already existing inbound security rules to ensure our new rule gets the highest priority. In this instance, the highest priority rule already set is the SSH rule with a priority of 300, so we want to set our new rule to have a priority of 299 or lower.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/c9c3672b-a630-4aac-a654-7ecfcf02f980)
+
+<br />
+
+The rest of the settings can be left to their defaults, so click *Add* to create the security rule. You should see our newly created rule at the top of the inbound port rules.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/0ea0c486-5114-44d1-85e8-45e55fb4a862)
+
+<br />
+
+Now that we have our rule set, go back to the Windows virtual machine and wait a couple seconds for the rule to kick in. You will eventually notice that we are not getting any more replies from our Linux virtual machine.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/51507d45-96ea-4154-b935-57b2f4d97465)
+
+<br />
+
+Why did this happen? Well, our newly created rule blocks any incoming ICMP traffic from coming in to our Windows machine, so none of the replies that our Linux machine is sending back are being received by our Windows machine. This is basically how network firewalls work to block unknown traffic from wreacking havoc.<br />
+
+Anyway, let's go ahead and let our ICMP traffic back through. We can do this by simply deleting the port rule we just created. Back in the Azure portal, navigate back to our Linux machine's port rules, and delete the one we just created by clicking the trash can icon to the right of it in the list. In the little pop-up, click **Yes**.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/71cbb7ab-4624-4d71-b7cc-460aa86e8b9f)
+
+<br />
+
+Once the rule is deleted, go back to the Windows virtual machine. In a few seconds, you will notice the ping replies are being allowed back through again.
+
+<br />
+
+![image](https://github.com/user-attachments/assets/4c7b68aa-3dc0-4646-988b-8f4eae941e02)
+
+<br />
+
+And with that, we have created a basic firewall rule!
+
+<br />
+
+<h2>Viewing More Network Traffic</h2>
