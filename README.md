@@ -290,3 +290,65 @@ And with that, we have created a basic firewall rule!
 <br />
 
 <h2>Viewing More Network Traffic</h2>
+
+Now that we have messed around with viewing ICMP traffic, we can move on to other types of network layer protocols that Wireshark can display for us. The second protocol we will play with is the Secure Shell, or SSH protocol.<br />
+
+Log back into the Windows VM and open Wireshark. Start a new packet capture by clicking the shark fin icon in the top left corner just like before. This time, instead of filtering ICMP traffic, we want to filter SSH traffic. To do this, type "ssh" into the **Apply a display filter** box. Like before, the box will turn green as it recognizes SSH as a valid protocol. Press enter. Wireshark will go blank just like before, so now we can see the packets sent when we do things involving the SSH protocol. Open a new Powershell window, and log in to the Linux VM by typing "ssh (Linux VM username)@(Linux VM private IP address)", then press enter. Before we have even fully logged in, we can already see some SSH packets displayed through Wireshark. If Powershell says the host authenticity can't be estalished, type "yes" to connect anyway. You will be prompted to type in your password, but no text will display when typing. This is for security reasons, your inputs are still being captured. Once you have logged in, you will be greeted by the Ubuntu command line welcome screen. Notice how more and more packets have been displayed!
+
+![image](https://github.com/user-attachments/assets/563a3a0b-1a33-4f91-9d0b-a3d08f06fea0)
+
+Type in a command, such as "pwd". This command prints the working directory's path. You will notice that before we even enter the command, we are already getting more packets. This is because the SSH protocol is used to transmit every character we type, so even typing a bunch of nonsense characters will make more packets show up in Wireshark. As this was just an example, go ahead and exit the SSH session by typing "exit" into the Powershell console. This will close the connection, and any further commands entered will be into the Windows VM.<br />
+
+Next, we will observe Dynamic Host Configuration Protocol, or DHCP traffic. This protocol is used to assign IP addresses and other communication parameters to devices on the network.<br />
+
+To start, clear the previous SSH filter we used by clicking the "X" icon on the right side of the filter text box.
+
+![image](https://github.com/user-attachments/assets/3fe588fd-0e54-4ae1-88cb-1af8427d1f05)
+
+Once we click this, all the packets will come rushing in just like before. Now, in the box, type "dhcp" to filter for DHCP traffic. To display some DHCP traffic, we will create a small batch file to run inside of Powershell. To do this, open Notepad by searching for it in the Windows search.
+
+![image](https://github.com/user-attachments/assets/12a706fc-ea8a-4595-af24-4f10be43ab16)
+
+Once Notepad is open, we can simply type two Powershell commands on their own lines, just like this:
+
+![image](https://github.com/user-attachments/assets/5b74b204-9ba7-403a-b575-174e0d21eff6)
+
+To save this as an executable batch file, click **File**, then **Save as**. In the pop-up window, enter the following:<br />
+For the **File name**, type in "dhcp.bat".<br />
+For the **Save as type** box, select **All files**. This ensure the file is saved with the ".bat" extension, instead of ".txt". Save this file to the Desktop by clicking **Desktop** in the left sidebar. Then, click **Save**.
+
+![image](https://github.com/user-attachments/assets/4b31a421-2e09-4b73-962f-7c9f54f5ddd5)
+
+Next, open a new Powershell window. Once opened, simple drag and drop our **dhcp.bat** file on the Desktop onto the Powershell window we just opened. Once we do that, we will see the path to our file filled in for us in the window.
+
+![image](https://github.com/user-attachments/assets/16710074-149f-4d6d-a313-966cc80da864)
+
+Press enter. We will lose connection to our virtual machine for a couple seconds, as the script we wrote will release the IP we are using to connect to the machine. The reason we made the batch file is so Powershell can automatically run the second command, which will let us regain access once finished.
+
+Once complete, we see that not only does Powershell show the commands that ran while we were disconnected, but Wireshark also displayed the DHCP traffic that occurred while we were gone. Notice that after the **Release** packet, our IP was 0.0.0.0 until the renewal.
+
+![image](https://github.com/user-attachments/assets/09cbd3b3-879d-48de-9019-e335bf407508)
+
+The next protocol we will monitor is the Domain Name System (DNS) protocol. Basically, this protocol helps us nagivate the internet using website names that are easy to remember instead of having to use external IP addresses.<br />
+
+To start, remove the DHCP filter we used in Wireshark during the last example, then click the green shark fin to restart the current capture. In the pop-up box, click **Continue without Saving**.
+
+![image](https://github.com/user-attachments/assets/6f0fae7a-eafd-4a26-9073-930e569bb132)
+
+Now, we can filter for the DNS protocol just like before, by typing "dns" into the filter box, then pressing enter. Open a new Powershell window, and you might notice we are already getting DNS traffic. Simply disregard it for now. In Powershell, type "nslookup", leave a space, then type in any website of your choosing. In this example, we will use www.nvidia.com.
+
+![image](https://github.com/user-attachments/assets/82173c20-90a2-4556-a2bd-f9d8bca6454e)
+
+Press enter, and we notice a bunch of DNS traffic regarding the website of our choosing.
+
+![image](https://github.com/user-attachments/assets/735ddb36-6fe6-484b-9aa4-37e84a5e6285)
+
+You may have noticed that Powershell gave us some IP addresses after we ran nslookup. Generally we can't use these to navigate the websites we use, but it's kind of neat to see what's behind the addresses we type into our internet browser!<br />
+
+The last example protocol we will use is the Remote Desktop Protocol. We won't be needing Powershell for this one, so feel free to close the window.<br />
+
+In Wireshark, remove the DNS filter and restart the current capture one last time. Then, in the filter box, type "tcp.port == 3389", and press enter. With that, you may have figured out that you can also filter packets by the port they use. Unlike the rest of the protocols we have filtered, you will notice that Wireshark is displaying a ton of traffic. This is because we are using RDP to connect to the virtual machine, and since we are viewing a live stream of the virtual machine, there is constantly traffic being transmitted. You may even notice that if you move the mouse around quickly in the remote connection, traffic will start transmitting even faster!
+
+![image](https://github.com/user-attachments/assets/ce1394da-a949-48c2-ad1b-6a92b3098efe)
+
+There are many more network layer protocols that can be monitored, but for now those should give a basic understanding of how to transmit and monitor traffic with Wireshark.
