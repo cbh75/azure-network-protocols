@@ -209,7 +209,7 @@ Once you have copied the private IP address, navigate back into the Windows virt
 
 <br />
 
-As shown in the above image, the packets sent from our ping command show up in Wireshark because said packets are using ICMP. You can see that for each reply we got back from our Linux machine, we got a corresponding packet displayed in Wireshark, along with a request packet for each. You can also use ping for external IP addresses, and by extension any website. Back in the Powershell window, type in "ping www.google.com". As long as Google is not down, (I really hope not!), we will see the replies from www.google.com, along with our request packets.
+As shown in the above image, the packets sent from our ping command show up in Wireshark because said packets are using ICMP. You can see that for each reply we got back from our Linux machine, we got a corresponding packet displayed in Wireshark, along with a request packet for each. You can also use ping for external IP addresses, and by extension any website. Back in the Powershell window, type in "ping www.google.com". As long as Google is not down (I really hope not!), we will see the replies from www.google.com, along with our request packets.
 
 <br />
 
