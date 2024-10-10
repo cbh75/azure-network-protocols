@@ -221,4 +221,4 @@ And with that, we have observed our first network layer protocol!
 
 <br />
 
-<h2>Viewing More Network Traffic</h2>
+<h2>Configuring a Firewall</h2>
